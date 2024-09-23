@@ -9,15 +9,15 @@ permalink: /cookieclicker/
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
    <style>
        body {
            display: flex;
            flex-direction: column;
            align-items: center;
            justify-content: center;
-           background-color: #f0f4f8;
-           font-family: 'Poppins', sans-serif;
+           background-color: #e0f7fa; /* Light teal background */
+           font-family: Arial, sans-serif;
            height: 100vh;
            margin: 0;
            padding: 0;
@@ -25,123 +25,117 @@ permalink: /cookieclicker/
 
        header {
            width: 100%;
-           height: 80px;
-           background-color: #2c3e50;
+           height: 100px;
+           background-color: #00796b; /* Dark teal */
+           color: white;
+           font-size: 2rem;
            display: flex;
-           justify-content: center;
            align-items: center;
+           justify-content: center;
            position: fixed;
            top: 0;
            left: 0;
            z-index: 1000;
-           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-       }
-
-       header h1 {
-           font-size: 2rem;
-           color: #ecf0f1;
-           font-weight: 600;
-           margin: 0;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
        }
 
        body {
-           padding-top: 100px;
+           padding-top: 120px; /* Space to avoid content overlapping header */
        }
 
        h1 {
-           font-size: 3rem;
-           color: #34495e;
+           font-family: 'Cookie', cursive;
+           color: #004d40; /* Dark green */
+           font-size: 3.5rem;
            margin-bottom: 20px;
        }
 
        #gameContainer {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
            text-align: center;
-           margin-top: 50px;
        }
 
        #cookie {
            width: 180px;
            height: 180px;
            cursor: pointer;
-           transition: transform 0.2s ease-in-out;
-       }
-
-       #cookie:hover {
-           transform: scale(1.05);
+           transition: transform 0.1s ease;
+           margin-top: 20px;
        }
 
        #cookie:active {
-           transform: scale(0.95);
+           transform: scale(0.9);
        }
 
        #score {
            margin-top: 20px;
            font-size: 28px;
-           color: #34495e;
-           font-weight: 600;
+           color: #004d40; /* Dark green */
+           font-weight: bold;
        }
 
        #upgrades {
-           margin-top: 30px;
            display: flex;
            flex-wrap: wrap;
            justify-content: center;
            gap: 15px;
+           margin-top: 30px;
        }
 
        .upgrade {
-           background-color: #3498db;
-           padding: 10px 20px;
+           background-color: #ffca28; /* Yellow */
+           padding: 15px;
            border: none;
-           border-radius: 12px;
+           border-radius: 10px;
            cursor: pointer;
-           color: #ecf0f1;
+           color: #fff;
            font-size: 16px;
-           font-weight: 600;
-           transition: background-color 0.3s ease;
-           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+           font-weight: bold;
+           width: 220px;
+           transition: background-color 0.2s ease;
        }
 
        .upgrade:hover {
-           background-color: #2980b9;
+           background-color: #ffa000; /* Darker yellow */
        }
 
        #youWin {
-           font-size: 36px;
-           color: #e74c3c;
-           margin-top: 50px;
+           font-size: 32px;
+           color: #d32f2f; /* Red */
+           margin-top: 40px;
            display: none;
-           font-weight: 600;
        }
 
        #playAgain {
-           background-color: #2ecc71;
+           background-color: #388e3c; /* Green */
            color: white;
-           padding: 12px 24px;
+           padding: 12px 25px;
            border: none;
-           border-radius: 12px;
+           border-radius: 10px;
            font-size: 18px;
            cursor: pointer;
            display: none;
            margin-top: 20px;
-           font-weight: 600;
-           transition: background-color 0.3s ease;
-           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+           transition: background-color 0.2s ease;
        }
 
        #playAgain:hover {
-           background-color: #27ae60;
+           background-color: #2e7d32; /* Darker green */
        }
    </style>
 </head>
 <body>
 
    <header>
-       <h1>Cookie Clicker</h1>
+       Cookie Clicker Game
    </header>
 
+   <h1>Cookie Clicker</h1>
+   
    <div id="gameContainer">
-       <!-- Add your cookie image URL here -->
        <img id="cookie" src="https://prettysimplesweet.com/wp-content/uploads/2020/07/Big-Chocolate-Chip-Cookies-150x150.jpg" alt="Cookie">
        <div id="score">Cookies: 0</div>
 
@@ -159,6 +153,8 @@ permalink: /cookieclicker/
        <button id="playAgain" onclick="resetGame()">Play Again</button>
    </div>
 
+   <audio id="clickSound" src='{{site.baseurl}}/images/Mouse Click Sound Effect.mp3'></audio>
+
    <script>
        let cookies = 0;
        let cookiesPerClick = 1;
@@ -168,11 +164,13 @@ permalink: /cookieclicker/
        const cookieElement = document.getElementById("cookie");
        const youWinElement = document.getElementById("youWin");
        const playAgainButton = document.getElementById("playAgain");
+       const clickSound = document.getElementById("clickSound");
 
        cookieElement.addEventListener("click", function () {
            cookies += cookiesPerClick;
            updateScore();
            checkWinCondition();
+           clickSound.play(); // Play the sound on click
        });
 
        function buyUpgrade(cost, increment) {
